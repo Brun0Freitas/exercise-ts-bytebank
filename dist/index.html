@@ -30,9 +30,7 @@
 
           <div class="flex">
             <div class="saldo-valor">
-              <strong>
-                Saldo <img src="images/olho.svg" alt="Mostrar saldo" />
-              </strong>
+              <strong> Saldo <img src="images/olho.svg" alt="Mostrar saldo" /> </strong>
               <div class="cc">
                 <span>Conta Corrente</span>
                 <span class="valor">R$ 2.500,00</span>
@@ -45,12 +43,7 @@
           <h2>Nova transação</h2>
           <form action="" method="post" novalidate>
             <div class="campo">
-              <select
-                name="tipoTransacao"
-                id="tipoTransacao"
-                class="campo-input"
-                required
-              >
+              <select name="tipoTransacao" id="tipoTransacao" class="campo-input" required>
                 <option value="">Selecione o tipo de transação</option>
                 <option value="Depósito">Depósito</option>
                 <option value="Transferência">Transferência</option>
@@ -59,27 +52,11 @@
             </div>
             <div class="campo">
               <label for="valor">Valor:</label><br />
-              <input
-                type="number"
-                name="valor"
-                id="valor"
-                class="campo-input"
-                placeholder="0,00"
-                step=".01"
-                min="0"
-                required
-              />
+              <input type="number" name="valor" id="valor" class="campo-input" placeholder="0,00" step=".01" min="0" required />
             </div>
             <div class="campo">
               <label for="data">Data:</label><br />
-              <input
-                type="date"
-                name="data"
-                id="data"
-                class="campo-input"
-                placeholder="dd/mm/aaaa"
-                required
-              />
+              <input type="date" name="data" id="data" class="campo-input" placeholder="dd/mm/aaaa" required />
             </div>
             <div class="campo">
               <button type="submit" class="btn">Concluir transação</button>
@@ -129,6 +106,7 @@
         </div>
       </aside>
     </main>
-    <script src="js/bytebank.js"></script>
+    <script src="js/nova-transacao-component.js"></script>
+    <script src="js/saldo-component.js"></script>
   </body>
 </html>
