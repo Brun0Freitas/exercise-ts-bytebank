@@ -1,3 +1,4 @@
+import { ListaTransacoes } from "./ListaTransacoes.js";
 import { OpcoesTransacao } from "./OpcoesTransacao.js";
 import { TipoTransacao } from "./TipoTransacao.js";
 
@@ -39,6 +40,26 @@ const Conta = {
     return new Date();
   },
 
+  getListaTransacoes(): ListaTransacoes[] {
+    const listaPrincipal: ListaTransacoes[] = [];
+    const copiaHistoricoLocal: TipoTransacao[] = structuredClone(historico); //criada cópia do histórico por questão de segurança
+    const historicoOrdenado: TipoTransacao[] = copiaHistoricoLocal.sort((t1, t2) => t2.data.getTime() - t1.data.getTime());
+    let labelAtual: string = "";
+
+    for (let transacao of historicoOrdenado) {
+      let labelMes: string = transacao.data.toLocaleDateString("pt-br", { month: "long", year: "numeric" });
+      if (labelAtual != labelMes) {
+        labelAtual = labelMes;
+        listaPrincipal.push({
+          label: labelAtual,
+          registros: [],
+        });
+      }
+      listaPrincipal.at(-1).registros.push(transacao);
+    }
+    return listaPrincipal;
+  },
+
   registrarTransacao(novaTransacao: TipoTransacao): void {
     if (novaTransacao.tipo == OpcoesTransacao.DEPOSITO) {
       depositar(novaTransacao.valor);
@@ -49,9 +70,9 @@ const Conta = {
     }
 
     historico.push(novaTransacao);
-    console.log(historico);
     localStorage.setItem("historico", JSON.stringify(historico));
   },
 };
 
+console.log(Conta.getListaTransacoes());
 export default Conta;
