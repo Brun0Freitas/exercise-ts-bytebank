@@ -1,10 +1,18 @@
 import { OpcoesTransacao } from "./OpcoesTransacao.js";
-let saldo = 3000;
+let saldo = JSON.parse(localStorage.getItem("saldo")) || 0;
+const historico = JSON.parse(localStorage.getItem("historico"), (key, value) => {
+    if (key === "data") {
+        return new Date(value);
+    }
+    return value;
+}) || [];
+// funcoes para validar e realizar as operacoes
 function depositar(valor) {
     if (valor <= 0) {
         throw new Error("O valor a depositar deve ser maior que zero.");
     }
     saldo += valor;
+    localStorage.setItem("saldo", saldo.toString());
 }
 function debitar(valor) {
     if (valor > saldo) {
@@ -14,7 +22,9 @@ function debitar(valor) {
         throw new Error("O valor a ser debitado deve ser maior que zero!");
     }
     saldo -= valor;
+    localStorage.setItem("saldo", saldo.toString());
 }
+// objeto conta e seus metodos
 const Conta = {
     getSaldo() {
         return saldo;
@@ -32,6 +42,9 @@ const Conta = {
         else {
             throw new Error("Tipo de transação é invalido!");
         }
+        historico.push(novaTransacao);
+        console.log(historico);
+        localStorage.setItem("historico", JSON.stringify(historico));
     },
 };
 export default Conta;

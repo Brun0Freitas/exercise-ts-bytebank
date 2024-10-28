@@ -19,7 +19,6 @@ elementoForm.addEventListener("submit", function (event) {
             valor: valor,
             data: data,
         };
-        console.log(novaTransacao);
         Conta.registrarTransacao(novaTransacao);
         SaldoComponent.atualizar();
         elementoForm.reset();
