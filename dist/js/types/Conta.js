@@ -1,5 +1,20 @@
 import { OpcoesTransacao } from "./OpcoesTransacao.js";
 let saldo = 3000;
+function depositar(valor) {
+    if (valor <= 0) {
+        throw new Error("O valor a depositar deve ser maior que zero.");
+    }
+    saldo += valor;
+}
+function debitar(valor) {
+    if (valor > saldo) {
+        throw new Error("Saldo insuficiente!");
+    }
+    else if (valor <= 0) {
+        throw new Error("O valor a ser debitado deve ser maior que zero!");
+    }
+    saldo -= valor;
+}
 const Conta = {
     getSaldo() {
         return saldo;
@@ -9,13 +24,13 @@ const Conta = {
     },
     registrarTransacao(novaTransacao) {
         if (novaTransacao.tipo == OpcoesTransacao.DEPOSITO) {
-            saldo += novaTransacao.valor;
+            depositar(novaTransacao.valor);
         }
         else if (novaTransacao.tipo == OpcoesTransacao.TRANSFERENCIA || novaTransacao.tipo == OpcoesTransacao.PAGAMENTO_BOLETO) {
-            saldo -= novaTransacao.valor;
+            debitar(novaTransacao.valor);
         }
         else {
-            alert("Tipo de transação é invalido!");
+            throw new Error("Tipo de transação é invalido!");
         }
     },
 };
