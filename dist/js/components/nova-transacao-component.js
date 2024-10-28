@@ -1,34 +1,25 @@
-import { atualizaSaldo, getSaldo } from "./saldo-component.js";
-import { OpcoesTransacao } from "../types/OpcoesTransacao.js";
-const elForm = document.querySelector(".block-nova-transacao form");
-elForm.addEventListener("submit", function (event) {
+import Conta from "../types/Conta.js";
+import SaldoComponent from "./saldo-component.js";
+const elementoForm = document.querySelector(".block-nova-transacao form");
+elementoForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    if (!elForm.checkValidity()) {
+    if (!elementoForm.checkValidity()) {
         alert("Por favor, preencha todos os campos da transação!");
         return;
     }
-    const inputTipoTransacao = elForm.querySelector("#tipoTransacao");
-    const inputValor = elForm.querySelector("#valor");
-    const inputData = elForm.querySelector("#data");
-    let tipoTransacao = inputTipoTransacao.value;
+    const inputTipo = elementoForm.querySelector("#tipoTransacao");
+    const inputValor = elementoForm.querySelector("#valor");
+    const inputData = elementoForm.querySelector("#data");
+    let tipo = inputTipo.value;
     let valor = inputValor.valueAsNumber;
     let data = new Date(inputData.value);
-    let saldo = getSaldo();
-    if (tipoTransacao == OpcoesTransacao.DEPOSITO) {
-        saldo += valor;
-    }
-    else if (tipoTransacao == OpcoesTransacao.TRANSFERENCIA || tipoTransacao == OpcoesTransacao.PAGAMENTO_BOLETO) {
-        saldo -= valor;
-    }
-    else {
-        alert("Tipo de transação é invalido!");
-    }
-    atualizaSaldo(saldo);
     const novaTransacao = {
-        tipoTransacao: tipoTransacao,
+        tipo: tipo,
         valor: valor,
         data: data,
     };
     console.log(novaTransacao);
-    elForm.reset();
+    Conta.registrarTransacao(novaTransacao);
+    SaldoComponent.atualizar();
+    elementoForm.reset();
 });

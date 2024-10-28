@@ -1,42 +1,34 @@
-import { atualizaSaldo, getSaldo } from "./saldo-component.js";
+import Conta from "../types/Conta.js";
+import SaldoComponent from "./saldo-component.js";
 import { OpcoesTransacao } from "../types/OpcoesTransacao.js";
-import { Transacao } from "../types/Transacao.js";
+import { TipoTransacao } from "../types/TipoTransacao.js";
 
-const elForm = document.querySelector(".block-nova-transacao form") as HTMLFormElement;
+const elementoForm = document.querySelector(".block-nova-transacao form") as HTMLFormElement;
 
-elForm.addEventListener("submit", function (event) {
+elementoForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  if (!elForm.checkValidity()) {
+  if (!elementoForm.checkValidity()) {
     alert("Por favor, preencha todos os campos da transação!");
     return;
   }
 
-  const inputTipoTransacao = elForm.querySelector("#tipoTransacao") as HTMLSelectElement;
-  const inputValor = elForm.querySelector("#valor") as HTMLInputElement;
-  const inputData = elForm.querySelector("#data") as HTMLInputElement;
+  const inputTipo = elementoForm.querySelector("#tipoTransacao") as HTMLSelectElement;
+  const inputValor = elementoForm.querySelector("#valor") as HTMLInputElement;
+  const inputData = elementoForm.querySelector("#data") as HTMLInputElement;
 
-  let tipoTransacao: OpcoesTransacao = inputTipoTransacao.value as OpcoesTransacao;
+  let tipo: OpcoesTransacao = inputTipo.value as OpcoesTransacao;
   let valor: number = inputValor.valueAsNumber;
   let data: Date = new Date(inputData.value);
-  let saldo: number = getSaldo();
 
-  if (tipoTransacao == OpcoesTransacao.DEPOSITO) {
-    saldo += valor;
-  } else if (tipoTransacao == OpcoesTransacao.TRANSFERENCIA || tipoTransacao == OpcoesTransacao.PAGAMENTO_BOLETO) {
-    saldo -= valor;
-  } else {
-    alert("Tipo de transação é invalido!");
-  }
-
-  atualizaSaldo(saldo);
-
-  const novaTransacao: Transacao = {
-    tipoTransacao: tipoTransacao,
+  const novaTransacao: TipoTransacao = {
+    tipo: tipo,
     valor: valor,
     data: data,
   };
 
   console.log(novaTransacao);
-  elForm.reset();
+  Conta.registrarTransacao(novaTransacao);
+  SaldoComponent.atualizar();
+  elementoForm.reset();
 });

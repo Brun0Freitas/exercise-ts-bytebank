@@ -1,5 +1,5 @@
 export enum OpcoesTransacao {
   DEPOSITO = "Depósito",
   TRANSFERENCIA = "Transferência",
-  PAGAMENTO_BOLETO = "Pagamento de boleto",
+  PAGAMENTO_BOLETO = "Pagamento de Boleto",
 }
