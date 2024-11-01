@@ -74,5 +74,4 @@ const Conta = {
   },
 };
 
-console.log(Conta.getListaTransacoes());
 export default Conta;

@@ -64,5 +64,4 @@ const Conta = {
         localStorage.setItem("historico", JSON.stringify(historico));
     },
 };
-console.log(Conta.getListaTransacoes());
 export default Conta;
