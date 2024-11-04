@@ -1,5 +1,5 @@
 import { ListaTransacoes } from "../types/ListaTransacoes.js";
-import Conta from "../types/Conta.js";
+import conta from "../types/Conta.js";
 import { formatarMoeda, formatarData } from "../utils/formatters.js";
 import { FormatoData } from "../types/FormatoData.js";
 
@@ -7,7 +7,7 @@ const elementoExtrato = document.querySelector(".extrato .registro-transacoes") 
 
 renderizarExtrato();
 function renderizarExtrato(): void {
-  const lista: ListaTransacoes[] = Conta.getListaTransacoes();
+  const lista: ListaTransacoes[] = conta.getListaTransacoes();
   elementoExtrato.innerHTML = "";
   let htmlTransacoesConjunto: string = "";
   for (let grupo of lista) {
@@ -29,6 +29,10 @@ function renderizarExtrato(): void {
           ${htmlTransacoesItens}
         </div>
         `;
+  }
+
+  if (htmlTransacoesConjunto === "") {
+    htmlTransacoesConjunto = "<div>Não há transações registradas </div>";
   }
   elementoExtrato.innerHTML = htmlTransacoesConjunto;
 }

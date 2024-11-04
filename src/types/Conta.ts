@@ -2,47 +2,54 @@ import { ListaTransacoes } from "./ListaTransacoes.js";
 import { OpcoesTransacao } from "./OpcoesTransacao.js";
 import { TipoTransacao } from "./TipoTransacao.js";
 
-let saldo: number = JSON.parse(localStorage.getItem("saldo")) || 0;
-const historico: TipoTransacao[] =
-  JSON.parse(localStorage.getItem("historico"), (key: string, value: string) => {
-    if (key === "data") {
-      return new Date(value);
-    }
-    return value;
-  }) || [];
+export class Conta {
+  protected nome: string;
+  protected saldo: number = JSON.parse(localStorage.getItem("saldo")) || 0;
+  private historico: TipoTransacao[] =
+    JSON.parse(localStorage.getItem("historico"), (key: string, value: any) => {
+      if (key === "data") {
+        return new Date(value);
+      }
+      return value;
+    }) || [];
 
-// funcoes para validar e realizar as operacoes
-function depositar(valor: number) {
-  if (valor <= 0) {
-    throw new Error("O valor a depositar deve ser maior que zero.");
+  constructor(nome: string) {
+    this.nome = nome;
   }
-  saldo += valor;
-  localStorage.setItem("saldo", saldo.toString());
-}
 
-function debitar(valor: number) {
-  if (valor > saldo) {
-    throw new Error("Saldo insuficiente!");
-  } else if (valor <= 0) {
-    throw new Error("O valor a ser debitado deve ser maior que zero!");
+  public getTitularConta() {
+    return this.nome;
   }
-  saldo -= valor;
-  localStorage.setItem("saldo", saldo.toString());
-}
 
-// objeto conta e seus metodos
-const Conta = {
   getSaldo(): number {
-    return saldo;
-  },
+    return this.saldo;
+  }
 
   getDataAcesso() {
     return new Date();
-  },
+  }
+
+  depositar(valor: number) {
+    if (valor <= 0) {
+      throw new Error("O valor a depositar deve ser maior que zero.");
+    }
+    this.saldo += valor;
+    localStorage.setItem("saldo", this.saldo.toString());
+  }
+
+  debitar(valor: number) {
+    if (valor > this.saldo) {
+      throw new Error("Saldo insuficiente!");
+    } else if (valor <= 0) {
+      throw new Error("O valor a ser debitado deve ser maior que zero!");
+    }
+    this.saldo -= valor;
+    localStorage.setItem("saldo", this.saldo.toString());
+  }
 
   getListaTransacoes(): ListaTransacoes[] {
     const listaPrincipal: ListaTransacoes[] = [];
-    const copiaHistoricoLocal: TipoTransacao[] = structuredClone(historico); //criada cópia do histórico por questão de segurança
+    const copiaHistoricoLocal: TipoTransacao[] = structuredClone(this.historico); //criada cópia do histórico por questão de segurança
     const historicoOrdenado: TipoTransacao[] = copiaHistoricoLocal.sort((t1, t2) => t2.data.getTime() - t1.data.getTime());
     let labelAtual: string = "";
 
@@ -58,21 +65,23 @@ const Conta = {
       listaPrincipal.at(-1).registros.push(transacao);
     }
     return listaPrincipal;
-  },
+  }
 
   registrarTransacao(novaTransacao: TipoTransacao): void {
     if (novaTransacao.tipo == OpcoesTransacao.DEPOSITO) {
-      depositar(novaTransacao.valor);
+      this.depositar(novaTransacao.valor);
     } else if (novaTransacao.tipo == OpcoesTransacao.TRANSFERENCIA || novaTransacao.tipo == OpcoesTransacao.PAGAMENTO_BOLETO) {
-      debitar(novaTransacao.valor);
+      this.debitar(novaTransacao.valor);
       novaTransacao.valor *= -1;
     } else {
       throw new Error("Tipo de transação é invalido!");
     }
 
-    historico.push(novaTransacao);
-    localStorage.setItem("historico", JSON.stringify(historico));
-  },
-};
+    this.historico.push(novaTransacao);
+    localStorage.setItem("historico", JSON.stringify(this.historico));
+  }
+}
 
-export default Conta;
+const conta = new Conta("Bruno Oliveira");
+
+export default conta;

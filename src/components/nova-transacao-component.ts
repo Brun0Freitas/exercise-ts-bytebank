@@ -1,4 +1,4 @@
-import Conta from "../types/Conta.js";
+import conta from "../types/Conta.js";
 import SaldoComponent from "./saldo-component.js";
 import { OpcoesTransacao } from "../types/OpcoesTransacao.js";
 import { TipoTransacao } from "../types/TipoTransacao.js";
@@ -29,7 +29,7 @@ elementoForm.addEventListener("submit", function (event) {
       data: data,
     };
 
-    Conta.registrarTransacao(novaTransacao);
+    conta.registrarTransacao(novaTransacao);
     SaldoComponent.atualizar();
     ExtratoComponent.atualizar();
     elementoForm.reset();
