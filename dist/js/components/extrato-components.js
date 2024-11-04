@@ -29,3 +29,9 @@ function renderizarExtrato() {
     }
     elementoExtrato.innerHTML = htmlTransacoesConjunto;
 }
+const ExtratoComponent = {
+    atualizar() {
+        renderizarExtrato();
+    },
+};
+export default ExtratoComponent;

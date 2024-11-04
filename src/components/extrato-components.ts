@@ -32,3 +32,11 @@ function renderizarExtrato(): void {
   }
   elementoExtrato.innerHTML = htmlTransacoesConjunto;
 }
+
+const ExtratoComponent = {
+  atualizar(): void {
+    renderizarExtrato();
+  },
+};
+
+export default ExtratoComponent;
